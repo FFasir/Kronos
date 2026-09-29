@@ -1,0 +1,202 @@
+# Kronos 指数/ETF 择时策略系统 — 配置文件
+# 基于中金公司研究报告《大语言时序模型Kronos的A股择时应用》
+
+server:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 1
+  reload: false
+  admin_username: "admin"
+  admin_password: "admin123"         # 本地实训密码；生产环境必须用 KRONOS_ADMIN_PASSWORD 覆盖
+  admin_session_hours: 8
+
+data:
+  raw_dir: "data/raw/"
+  processed_dir: "data/processed/"
+  outputs_dir: "data/outputs/"
+  data_source: "akshare"              # "akshare" | "tushare"
+  tushare_token: ""
+
+  # ====== 指数/ETF 标的列表 ======
+  index_list:
+    - {code: "000852", name: "中证1000",    type: "index"}
+    - {code: "000300", name: "沪深300",     type: "index"}
+    - {code: "000905", name: "中证500",     type: "index"}
+    - {code: "399006", name: "创业板指",     type: "index"}
+    - {code: "000688", name: "科创50",      type: "index"}
+    - {code: "000016", name: "上证50",      type: "index"}
+
+  etf_list:
+    - {code: "512100", name: "中证1000ETF",    type: "etf", track_index: "000852"}
+    - {code: "510300", name: "沪深300ETF",     type: "etf", track_index: "000300"}
+    - {code: "510500", name: "中证500ETF",     type: "etf", track_index: "000905"}
+    - {code: "159915", name: "创业板ETF",      type: "etf", track_index: "399006"}
+    - {code: "588000", name: "科创50ETF",      type: "etf", track_index: "000688"}
+    - {code: "510050", name: "上证50ETF",      type: "etf", track_index: "000016"}
+
+  # 下载时间范围
+  download_start: "2010-01-01"
+  download_end: "2026-07-12"
+
+  # 微调数据（按论文: 训练集2010-2022, 验证集2023-2024）
+  finetune_train_start: "2010-01-01"
+  finetune_train_end:   "2022-12-31"
+  finetune_val_start:   "2023-01-01"
+  finetune_val_end:     "2024-12-31"
+
+  # 股票日线导入后的独立训练集（scripts/import_stock_archive.py 生成）
+  component_processed_path: "data/processed/components.h5"
+  # 官方 Kronos 微调输入，只允许由后复权 daily_hfq.zip 直读转换生成。
+  qlib_data_path: "data/processed/qlib/cn_data"
+  csi1000_instrument: "csi1000"
+  a_share_archive: "A股数据/daily_hfq.zip"
+  a_share_catalog: "A股数据/股票列表.csv"
+
+model:
+  # Kronos 版本: "mini" | "small" | "base" | "large"
+  kronos_version: "base"
+
+  # Kronos 官方 Hugging Face 仓库
+  kronos_hf_id: "NeoQuasar/Kronos-base"
+  kronos_tokenizer_hf_id: "NeoQuasar/Kronos-Tokenizer-base"
+
+  # Path A: 下载完成后优先使用的本地目录
+  pretrained_path: "models/kronos_base"
+  tokenizer_path: "models/kronos_tokenizer"
+  # Model selection on the ETF timing holdout favored the original base weights.
+  # Fine-tuned checkpoints remain available as research artifacts only.
+  use_finetuned: false
+  finetuned_predictor_path: "models/official_finetune/csi1000_predictor/checkpoints/best_model"
+  finetuned_tokenizer_path: "models/official_finetune/csi1000_tokenizer/checkpoints/best_model"
+  finetuned_model_version: "research-only-legacy-csi1000-20260715"
+  # 官方仓库源码目录，包含 model/Kronos、KronosTokenizer、KronosPredictor
+  official_repo_path: "third_party/Kronos"
+
+  # 固定生产推理参数；滚动网格只用于研究回测，不作为线上默认值。
+  inference:
+    temperature: 0.6
+    top_p: 0.9
+    sample_count: 5
+    batch_size: 32
+
+  # Requirement-compliance path: three-month context, one-month horizon.
+  # Keep automatic execution disabled until the rolling source contains the
+  # three calendar months immediately preceding the target month.
+  rolling:
+    enabled: false
+    activate_after_training: false
+    target_month: ""
+    source_dataset: "data/official_processed_datasets_all_a_share"
+    dataset_root: "data/rolling_kronos"
+    model_root: "models/rolling_kronos"
+    lookback: 65
+    horizon: 20
+    validation_days: 22
+    epochs: 10
+    train_samples: 60000
+    val_samples: 6000
+    batch_size: 30
+    prediction_samples: 5
+    prediction_batch_size: 32
+    device: "cuda"
+
+  # Path B fallback 配置（当Kronos不可用时）
+  fallback:
+    model_type: "transformer"         # "transformer" | "lstm"
+    d_model: 256
+    n_layers: 6
+    n_heads: 8
+    d_ff: 1024
+    dropout: 0.1
+    max_seq_len: 512
+
+  device: "auto"                      # "auto" | "cuda" | "cpu"
+
+  # 训练超参数
+  training:
+    seq_len: 250                      # 论文表16的微调回看窗口
+    pred_len: 5                       # 预测未来第5日收盘价 (论文方法)
+    epochs: 10                        # 微调epochs (Path A)
+    epochs_fallback: 50               # 从零训练epochs (Path B)
+    batch_size: 30                    # 论文表16；4090 与论文3090同为24GB显存
+    batch_size_cpu: 4                 # CPU batch size
+    learning_rate: 1.0e-5             # 微调lr (论文)
+    learning_rate_fallback: 1.0e-4    # Path B lr
+    weight_decay: 1.0e-5
+    early_stop_patience: 3            # Path A 连续不改善轮数
+    early_stop_patience_fallback: 10  # Path B 早停
+    grad_clip: 1.0
+    val_split: 0.2
+
+# 滚动搜参配置 (论文核心)
+param_search:
+  # 网格搜索范围
+  T_values:        [0.3, 0.6, 0.8, 1.0]
+  top_p_values:    [0.2, 0.4, 0.6, 0.9]
+  lookback_values: [30, 60, 90]
+
+  # 滚动窗口
+  test_window_months: 1               # 测试集 = 1个月
+  val_window_months: 1                # 验证集 = 测试集前1个月
+
+  # 评估指标
+  metric: "net_return"                # 按验证期含成本净收益选最优参数
+
+strategy:
+  # 论文 §3.2：单标的中证1000、满仓、固定持有5个交易日。
+  paper_mode: true
+  paper_symbol: "000852"
+  execution_symbol: "512100"
+  # 显式声明"模型预测"任务（predict.py / 管理端"生成模型预测"）的标的范围，
+  # 防止脚本不带 --symbols 时默认遍历全 A 股。用 --all-a-share 显式跑全市场。
+  prediction_symbols: ["000852", "512100"]
+  buy_threshold: 0.005                # 预测收益率 > 0.5% → BUY (论文值)
+  long_only: true                     # 仅做多 (论文设置)
+  hold_days: 5                        # 固定持仓5个交易日 (论文方法)
+
+  # 论文复现不叠加止损、止盈、熔断等额外规则。
+  risk_controls_enabled: false
+  stop_loss: -0.08                    # 止损 -8%
+  take_profit: 0.15                   # 止盈 +15%
+  max_single_position: 0.30
+  min_positions: 2
+  max_positions: 5
+  stock_selection_prob_up: 0.65
+  stock_selection_score: 6.0
+  stock_selection_min_amount: 5000000
+  stock_selection_top_k: 50
+  # 个股预测合理性过滤：|5日预测收益| 超过该值视为数据异常，从选股池剔除并标注。
+  # 主板 5 个交易日涨跌停累计极限约 ±61%，取 ±40% 为保守阈值。
+  stock_selection_max_abs_return: 0.40
+
+backtest:
+  default_capital: 1000000.00         # 初始资金 100万
+  commission_rate: 0.0003             # 佣金 万分之三
+  stamp_tax_rate: 0.001               # 印花税 千分之一 (仅卖出)
+  slippage_rate: 0.001                # 滑点 0.1%
+  benchmark_index: "000852"           # 中证1000 作为基准
+  risk_free_rate: 0.025               # 无风险利率 2.5%
+
+database:
+  sqlite_path: "data/kronos.db"
+
+logging:
+  level: "INFO"
+  dir: "logs/"
+  format: "[%(asctime)s] [%(levelname)s] [%(module)s:%(lineno)d] %(message)s"
+  datefmt: "%Y-%m-%d %H:%M:%S"
+
+reproducibility:
+  random_seed: 42
+
+scheduler:
+  enabled: true
+  timezone: "Asia/Shanghai"
+  daily_update_time: "16:30"
+  preprocess_timeout_seconds: 7200
+  prediction_timeout_seconds: 7200
+  rolling_training_timeout_seconds: 28800
+  monthly_training_day: 1
+  monthly_training_time: "02:00"
+  # 每日收盘后额外跑一次全 A 预测（约 8 分钟），保证任意个股页面有当日新鲜预测。
+  full_a_share_daily: true

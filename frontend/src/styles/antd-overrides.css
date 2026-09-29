@@ -1,0 +1,74 @@
+/* Ant Design theme overrides — align with Kronos design tokens */
+
+/* Card overrides */
+.ant-card {
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+.ant-card-hoverable:hover {
+  box-shadow: var(--shadow-lg) !important;
+}
+
+/* Table overrides */
+.ant-table {
+  font-size: 13px;
+}
+
+.ant-table-thead > tr > th {
+  color: var(--text-muted) !important;
+  font-weight: 500 !important;
+  font-size: 13px;
+}
+
+/* Sidebar — Menu overrides */
+.ant-menu-item-selected {
+  background: var(--primary-light) !important;
+  color: var(--primary) !important;
+}
+
+.ant-menu-item:hover {
+  color: var(--text) !important;
+}
+
+/* Button overrides */
+.ant-btn-primary {
+  box-shadow: none !important;
+}
+
+/* Input overrides */
+.ant-input:focus,
+.ant-select-focused .ant-select-selector {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 3px var(--primary-light) !important;
+}
+
+/* Layout overrides */
+.ant-layout-sider {
+  background: var(--surface-1) !important;
+  border-right: 1px solid var(--border) !important;
+}
+
+.ant-layout-header {
+  background: var(--surface-1) !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+
+/* Statistic overrides */
+.ant-statistic-content-value {
+  font-weight: 600 !important;
+}
+
+/* Tag overrides */
+.ant-tag {
+  border-radius: 12px !important;
+}
+
+/* Tabs overrides */
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: var(--primary) !important;
+}
+
+.ant-tabs-ink-bar {
+  background: var(--primary) !important;
+}

@@ -1,0 +1,39 @@
+{
+  "trade_count": 14,
+  "gross_compounded_return": 0.3690554087234894,
+  "net_compounded_return": 0.32011783142929273,
+  "win_rate_before_cost": 0.7142857142857143,
+  "mean_net_trade_return": 0.020456900926779393,
+  "cost_assumption": {
+    "commission_rate": 0.0003,
+    "stamp_tax_rate": 0.0,
+    "slippage_rate": 0.001
+  },
+  "trading_days": 183,
+  "annualized_return": 0.46893370617929264,
+  "annualized_volatility": 0.12740473028693,
+  "sharpe_zero_rf": 3.06754042714613,
+  "max_drawdown": -0.046653869130112824,
+  "in_market_days": 70,
+  "in_market_ratio": 0.3825136612021858,
+  "benchmark_annualized_return": 0.4482766470458206,
+  "benchmark_annualized_volatility": 0.22994491439950424,
+  "benchmark_max_drawdown": -0.16870772600903272,
+  "total_relative_excess_return": 0.010280916128907469,
+  "benchmark_buy_and_hold_return": 0.306683923603726,
+  "prediction_spearman": 0.9240711524718657,
+  "directional_accuracy": 0.5507246376811594,
+  "signal_data_range": [
+    "2014-10-17",
+    "2026-09-01"
+  ],
+  "execution_data_range": [
+    "2014-10-17",
+    "2026-09-01"
+  ],
+  "execution_data": null,
+  "test_range": [
+    "2025-01",
+    "2025-09"
+  ]
+}

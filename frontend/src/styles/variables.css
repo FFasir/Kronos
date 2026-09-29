@@ -1,0 +1,60 @@
+/* Kronos Stock Analysis System — CSS Variables (v1.0) */
+/* Extracted from user_portal.html & admin_portal.html — unified design tokens */
+
+:root {
+  /* Background hierarchy */
+  --bg: #f5f6fa;
+  --surface-1: #fff;
+  --surface-2: #fafbfc;
+
+  /* Borders */
+  --border: #e8ecf1;
+
+  /* Text hierarchy */
+  --text: #1a1d28;
+  --text-muted: #8c919f;
+  --text-secondary: #4a5060;
+
+  /* Brand / Primary */
+  --primary: #4f6ef6;
+  --primary-hover: #3d5bd9;
+  --primary-light: #eef1fd;
+
+  /* Semantic */
+  --success: #22b07d;
+  --success-bg: #eafaf4;
+  --danger: #e74c5e;
+  --danger-bg: #fef0f2;
+  --warning: #f59e0b;
+  --warning-bg: #fffbeb;
+  --accent: #7c5cf0;
+
+  /* Shape */
+  --radius: 10px;
+  --radius-sm: 6px;
+
+  /* Shadow */
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.1);
+
+  /* Layout */
+  --sidebar-w: 230px;
+  --header-h: 56px;
+
+  /* Motion */
+  --transition: 0.2s ease;
+}
+
+/* Dark mode overrides — applied via [data-theme="dark"] on <html> */
+[data-theme='dark'] {
+  --bg: #141820;
+  --surface-1: #1c212b;
+  --surface-2: #232833;
+  --border: #2d3340;
+  --text: #e4e8f0;
+  --text-muted: #6b7280;
+  --text-secondary: #9ca3b0;
+  --primary-light: rgba(79, 110, 246, 0.12);
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.4);
+}

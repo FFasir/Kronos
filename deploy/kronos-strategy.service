@@ -1,0 +1,17 @@
+[Unit]
+Description=Kronos A-share analysis service
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/kronos-strategy
+EnvironmentFile=/root/kronos-strategy/.env.production
+Environment=PYTHONPATH=/root/kronos-strategy
+ExecStart=/usr/local/miniconda3/envs/py312/bin/python -m uvicorn src.service_layer.web_server:app --host 0.0.0.0 --port 8000 --workers 1
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target

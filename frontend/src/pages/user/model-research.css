@@ -1,0 +1,117 @@
+.research-page {
+  max-width: 1480px;
+  margin: 0 auto;
+}
+
+.research-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 6px 0 18px;
+}
+
+.research-heading h3,
+.research-heading p,
+.research-section h4 {
+  margin-bottom: 0;
+}
+
+.research-heading h3 {
+  margin-top: 8px;
+}
+
+.model-version {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 220px;
+}
+
+.research-stats {
+  margin-top: 18px;
+}
+
+.metric-card {
+  height: 92px;
+}
+
+.metric-value {
+  margin-top: 6px;
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 650;
+}
+
+.metric-value.positive {
+  color: var(--danger);
+}
+
+.research-section {
+  margin-top: 28px;
+}
+
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.chart-surface {
+  padding: 16px 12px 8px;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.selected-model-row > td {
+  background: var(--success-bg) !important;
+}
+
+.active-model-row > td:first-child {
+  box-shadow: inset 3px 0 0 var(--primary);
+}
+
+.model-registry-section {
+  margin-top: 20px;
+}
+
+.method-section {
+  padding-bottom: 24px;
+}
+
+.method-section h4 {
+  margin-bottom: 12px;
+}
+
+.research-loading {
+  min-height: 360px;
+  display: grid;
+  place-items: center;
+}
+
+@media (max-width: 767px) {
+  .research-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .model-version {
+    align-items: flex-start;
+    min-width: 0;
+  }
+
+  .metric-card {
+    height: 84px;
+  }
+
+  .metric-value {
+    font-size: 20px;
+  }
+
+  .section-title {
+    align-items: flex-start;
+  }
+}

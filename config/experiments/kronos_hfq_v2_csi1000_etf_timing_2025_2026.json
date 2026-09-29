@@ -1,0 +1,60 @@
+{
+  "experiment_id": "EXP-20260716-02-a-share-hfq-v2-csi1000-timing",
+  "status": "frozen_before_backtest",
+  "objective": "Evaluate the new all-A-share HFQ v2 Kronos checkpoint on CSI 1000 timing signals executed with 512100 ETF prices.",
+  "research_status": "Retrospective sample-out evaluation; the periods have been observed elsewhere and are not pristine final holdouts for strategy development.",
+  "periods": [
+    {
+      "name": "development_2025",
+      "start_month": "2025-02",
+      "end_month": "2025-09",
+      "output_dir": "data/outputs/new_all_a_share_hfq_v2_csi1000_etf_dev_2025"
+    },
+    {
+      "name": "holdout_2025q4_2026h1",
+      "start_month": "2025-10",
+      "end_month": "2026-06",
+      "output_dir": "data/outputs/new_all_a_share_hfq_v2_csi1000_etf_holdout_2025q4_2026h1"
+    }
+  ],
+  "model": {
+    "tokenizer_path": "models/official_finetune/all_a_share_hfq_v2_20260715/tokenizer/checkpoints/best_model",
+    "tokenizer_sha256": "246d52635b1b6b25062ad96c68b5748d23b8b36fa206c5aed331035f1a17bba6",
+    "predictor_path": "models/official_finetune/all_a_share_hfq_v2_20260715/predictor/checkpoints/best_model",
+    "predictor_sha256": "c1e4af593f29bfe3187f680f4b34c1df0114caec1a9f0b70f7240ad339117e1b"
+  },
+  "data": {
+    "signal_data": "data/raw/csi1000_index_daily.csv",
+    "signal_data_sha256": "ca9179ad47950309827888b74b560bc0a01e196c078dedda6e4f86902b142861",
+    "execution_data": "data/raw/research/etf_long_history/512100_etf_daily.csv",
+    "execution_data_sha256": "37c64db7bed435a126a895ff7bea9458772398a135a6d4ca0b25188887d60ab3"
+  },
+  "inference_and_execution": {
+    "samples": 10,
+    "batch_size": 32,
+    "seed": 100,
+    "selection_metric": "net_return",
+    "parameter_grid": {
+      "temperature": [0.3, 0.6, 0.8, 1.0],
+      "top_p": [0.2, 0.4, 0.6, 0.9],
+      "lookback": [30, 60, 90]
+    },
+    "buy_threshold": 0.005,
+    "commission_rate": 0.0003,
+    "stamp_tax_rate": 0.0,
+    "slippage_rate": 0.001,
+    "signal_timing": "T-1 close",
+    "entry": "T open",
+    "exit": "fifth subsequent trading-day close",
+    "overlapping_positions": false,
+    "walk_forward_script": "scripts/run_paper_walk_forward.py",
+    "walk_forward_script_sha256": "5818be634d61688049e67f604de54b9374f52cbbeaca0fcfb9e830b7cc81a3bc"
+  },
+  "rules": [
+    "Each test month selects inference parameters only from its immediately preceding complete calendar month.",
+    "Signals use CSI 1000 OHLCV; entries, exits, daily equity, and the benchmark use 512100 ETF OHLCV.",
+    "Do not modify the model, grid, threshold, costs, or evaluation intervals after observing these outputs.",
+    "Report both trade-level compounded return and daily portfolio risk metrics.",
+    "This ETF timing simulation does not apply individual-stock price-limit rules."
+  ]
+}

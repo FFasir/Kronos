@@ -1,0 +1,67 @@
+/* Global utility classes */
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Chart container sizes */
+.chart-container {
+  width: 100%;
+  height: 300px;
+}
+
+.chart-container-sm {
+  width: 100%;
+  height: 200px;
+}
+
+.chart-lg {
+  height: 380px;
+}
+
+.chart-xl {
+  height: 420px;
+}
+
+.chart-md {
+  height: 260px;
+}
+
+/* Color utilities */
+.color-up {
+  color: var(--danger);
+}
+
+.color-down {
+  color: var(--success);
+}
+
+.color-buy {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.color-sell {
+  color: var(--success);
+  font-weight: 600;
+}
+
+.color-hold {
+  color: var(--warning);
+  font-weight: 600;
+}

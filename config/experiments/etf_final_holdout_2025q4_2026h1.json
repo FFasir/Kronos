@@ -1,0 +1,45 @@
+{
+  "experiment_id": "EXP-20260715-03",
+  "status": "frozen_before_final_holdout",
+  "objective": "Evaluate the existing all-A-share Kronos ETF timing rule without changing model, inference, execution, or costs after development results were observed.",
+  "development_period": {
+    "start": "2025-02-05",
+    "end": "2025-09-30",
+    "reference_output": "data/outputs/all_a_share_etf_walk_forward"
+  },
+  "final_holdout_period": {
+    "start_month": "2025-10",
+    "end_month": "2026-06",
+    "output_dir": "data/outputs/all_a_share_etf_final_holdout_2025q4_2026h1"
+  },
+  "model": {
+    "tokenizer_path": "models/official_finetune/all_a_share/all_a_share_tokenizer/checkpoints/best_model",
+    "tokenizer_sha256": "2433f6b6878d08b99462f5672c4aa821a501fe974eab32116cdab606fc8f3768",
+    "predictor_path": "models/official_finetune/all_a_share/all_a_share_predictor/checkpoints/best_model",
+    "predictor_sha256": "8b4464f346f8973b13aec3a5add3869d11516f914ad7ce10b3be73a0cd5a0de9"
+  },
+  "data": {
+    "signal_data": "data/raw/000852_中证1000_daily.csv",
+    "signal_data_sha256": "ca9179ad47950309827888b74b560bc0a01e196c078dedda6e4f86902b142861",
+    "execution_data": "data/raw/research/etf_long_history/512100_etf_daily.csv",
+    "execution_data_sha256": "37c64db7bed435a126a895ff7bea9458772398a135a6d4ca0b25188887d60ab3"
+  },
+  "inference_and_execution": {
+    "samples": 10,
+    "batch_size": 32,
+    "seed": 100,
+    "selection_metric": "net_return",
+    "buy_threshold": 0.005,
+    "commission_rate": 0.0003,
+    "stamp_tax_rate": 0.0,
+    "slippage_rate": 0.001,
+    "walk_forward_script": "scripts/run_paper_walk_forward.py",
+    "walk_forward_script_sha256": "af1a42278cbbc6a3bb56a45a10ea28c6612ab6bedf86103c99cf10d2784ac3e8"
+  },
+  "rules": [
+    "Do not modify this model, data version, parameter grid, threshold, costs, or evaluation interval based on final-holdout outputs.",
+    "Each test month selects inference parameters only from its immediately preceding calendar month.",
+    "Signals use CSI 1000 OHLCV; entry and exit fills use 512100 ETF OHLCV.",
+    "The final holdout ends at 2026-06 because it is the latest complete month not used by the development report."
+  ]
+}

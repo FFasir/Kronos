@@ -1,0 +1,9 @@
+{
+  "key": "kronos_base",
+  "version": "base-selected-20260716",
+  "model": {
+    "use_finetuned": false,
+    "pretrained_path": "models/kronos_base",
+    "tokenizer_path": "models/kronos_tokenizer"
+  }
+}

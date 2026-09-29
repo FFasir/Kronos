@@ -1,0 +1,43 @@
+{
+  "experiment_id": "EXP-20260715-05",
+  "research_status": "development comparison; 2025 results were previously observed and are not a new final holdout",
+  "dataset_path": "data/official_processed_datasets_all_a_share",
+  "official_repo": "third_party/Kronos",
+  "output_dir": "data/outputs/kronos_checkpoint_comparison_2025",
+  "settings": {
+    "start_date": "2025-01-01",
+    "end_date": "2025-09-30",
+    "dates_per_month": 1,
+    "symbol_count": 64,
+    "lookback": 250,
+    "horizon": 5,
+    "temperature": 0.6,
+    "top_p": 0.9,
+    "sample_count": 3,
+    "batch_size": 32,
+    "seed": 100
+  },
+  "models": [
+    {
+      "name": "base",
+      "tokenizer_path": "models/kronos_tokenizer",
+      "model_path": "models/kronos_base"
+    },
+    {
+      "name": "legacy_csi1000",
+      "tokenizer_path": "models/official_finetune/csi1000_tokenizer/checkpoints/best_model",
+      "model_path": "models/official_finetune/csi1000_predictor/checkpoints/best_model"
+    },
+    {
+      "name": "legacy_all_a_share",
+      "tokenizer_path": "models/official_finetune/all_a_share/all_a_share_tokenizer/checkpoints/best_model",
+      "model_path": "models/official_finetune/all_a_share/all_a_share_predictor/checkpoints/best_model"
+    },
+    {
+      "name": "optimized_all_a_share",
+      "tokenizer_path": "models/official_finetune/optimized_all_a_share_20260715/tokenizer/checkpoints/best_model",
+      "model_path": "models/official_finetune/optimized_all_a_share_20260715/predictor/checkpoints/best_model",
+      "optional": true
+    }
+  ]
+}

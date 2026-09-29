@@ -1,0 +1,15 @@
+# Normalize line endings to LF in the repository.
+* text=auto eol=lf
+
+# Windows-only scripts keep CRLF so they run without re-encoding.
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary assets must never be line-ending normalized.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.pdf binary
+*.xlsx binary
+*.db binary

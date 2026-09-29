@@ -1,0 +1,26 @@
+# Kronos production release contents
+
+# Application source and runtime configuration
+.gitignore
+README.md
+requirements.txt
+src/
+scripts/
+third_party/Kronos/
+config/
+deploy/
+
+# Prebuilt web application (the server does not need Node.js)
+frontend/dist/
+
+# A-share security catalog used by stock search and industry filters.
+# package_release.ps1 resolves its Chinese path in an ASCII-safe way.
+<A-share data directory>/<stock catalog>.csv
+
+# Optional runtime seed files, included only with package_release.ps1 -IncludeDatabase
+data/kronos.db
+data/raw/a_share_download_meta.json
+
+# Deliberately excluded from releases
+# venv/, frontend/node_modules/, tests/, logs/, tmp/, __pycache__/
+# models/, data/processed/, data/outputs/, research artifacts and source archives
